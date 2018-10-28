@@ -1,11 +1,10 @@
-
-
 const rl = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
 var fs = require('fs');
+var scheduler = require("./scheduler.js");
   
 
 /*
@@ -14,7 +13,7 @@ var fs = require('fs');
     3. Check if file exists
     4. Process file
 */  
-
+/*
 console.log('Please provide complete path to the input file');
 rl.setPrompt('Enter Path > ');
 rl.prompt();
@@ -41,16 +40,30 @@ rl.on('line', function(path) {
         rl.prompt();
     }
 });
-
+*/
 /*
     1. Process the file
 */
 
-function processFile(path){
-    console.log(`ddddddddddd`);
-    genOutputFile(arr)
+// function processFile(path){
+function processFile(){
+    var ordersArr=[]; 
+    var lineReader = require('readline').createInterface({
+        input: require('fs').createReadStream(`./input.txt`)
+       // input: require('fs').createReadStream(path)
+    });
+     
+    lineReader.on('line', function (line) {
+        ordersArr.push({
+            id:line.split(" ")[0],
+            location:line.split(" ")[1],
+            orderTime:line.split(" ")[2]
+        });
+    });
+    scheduler.getOrderListArray(ordersArr); 
+    //genOutputFile(arr);
 }
-
+processFile();
 /*
     1. Write Array into .txt file
 */
