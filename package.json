@@ -1,0 +1,23 @@
+{
+  "name": "drone-delivery-challenge",
+  "version": "1.0.0",
+  "description": "A NodeJS project to schedule drone-carried deliveries to customers in a small town",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chris93007/DroneDeliveryChallenge.git"
+  },
+  "author": "Christine John <chris93007@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chris93007/DroneDeliveryChallenge/issues"
+  },
+  "homepage": "https://github.com/chris93007/DroneDeliveryChallenge#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "readline": "^1.3.0"
+  }
+}
