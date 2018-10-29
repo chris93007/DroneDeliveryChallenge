@@ -28,7 +28,7 @@ exports.droneSchedule = function (arr) {
             return a["distanceFromWarehouse"] - b["distanceFromWarehouse"] || a["orderTime"] - b["orderTime"];
         });
         async.waterfall([async.apply(recursivelyCheckList, arr.orderList)], function (err, results) {
-            var nps= utils.calculateNPS(data, totalOrders);
+            var nps = utils.calculateNPS(data, totalOrders);
             console.log(`waterfall results`, '\n', results, '\n', nps);
             resolve();
         })
@@ -39,14 +39,18 @@ exports.droneSchedule = function (arr) {
 recursivelyCheckList = (sortedArray, callback) => {
     // console.log('recursive function called....')
     if (sortedArray.length) {
-        async.eachSeries(sortedArray, findNextOrder, function (results, err) {
+        async.mapValues(sortedArray, findNextOrder.bind(null, sortedArray.length), function (results, err) {
             // console.log(`eachSeries results`, results)
-            //remove that element from sorted array
-            var index = sortedArray.indexOf(results.org);
-            if (index > -1) {
-                sortedArray.splice(index, 1);
+            if (results.markDone) {
+                //remove that element from sorted array
+                var index = sortedArray.indexOf(results.org);
+                if (index > -1) {
+                    sortedArray.splice(index, 1);
+                }
+                scheduleList.push(results.markDone);
+            } else if (results.notFound) {
+                currentTime = sortedArray[0].orderTime;
             }
-            scheduleList.push(results.markDone);
             recursivelyCheckList(sortedArray, callback);
 
         });
@@ -56,7 +60,8 @@ recursivelyCheckList = (sortedArray, callback) => {
     }
 }
 
-findNextOrder = (order, callback) => {
+findNextOrder = (size, order, key, callback) => {
+
     if (order.orderTime <= currentTime) {
         var deliverTo = {
             location: order.id,
@@ -72,7 +77,22 @@ findNextOrder = (order, callback) => {
             org: order
         });
     } else {
-        console.log('else block')
-        callback();
+        console.log('else block');
+        console.log(key, `---`, size)
+        //if element is last in the list
+        if (key == (size - 1)) {
+            //update currentTime and start recursive again
+            callback({
+                notFound: true
+            });
+
+        }
+
+        //if element is not last in the list
+        else {
+            callback();
+        }
+
+
     }
 }

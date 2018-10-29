@@ -18,7 +18,7 @@ function main() {
     // .then(()=>{
     //     process.exit();
     // });
-    fileOps.processFile("C:\Users/\chris93007/\Documents/\GitHub/\DroneDeliveryChallenge/\input.txt")
+    fileOps.processFile("C:\Users/\chris93007/\Documents/\GitHub/\DroneDeliveryChallenge/\input2.txt")
     .then(scheduler.droneSchedule)
     .then(fileOps.generateOutputFile)
     .then(()=>{
