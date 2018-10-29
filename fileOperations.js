@@ -1,9 +1,12 @@
 var fs = require('fs');
-var scheduler = require("./scheduler.js");
+const rl = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 var exports = module.exports = {};
 
-var arr = [[1373628934214, 3],
-[13736000000000028934218, 3],
+var arr1 = [[1373628934214, 3],
+[137360000028934218, 3],
 [1373628934220, 1],
 [1373628934230, 1],
 [1373628934234, 0],
@@ -14,31 +17,77 @@ var arr = [[1373628934214, 3],
 [1373628934266, 11]];
 
 
+exports.getFileFromCLI = function () {
+    var promise = new Promise(function (resolve, reject) {
+        console.log('Please provide complete path to the input file');
+        rl.setPrompt('Enter Path > ');
+        rl.prompt();
+        rl.on('line', function (path) {
+            if (!path.length) {
+                console.log(`Please provide a path`);
+                rl.prompt();
+            }
+            else if (/^[a-zA-Z]:\\(\w+\\)*\w*.txt$/.test(path)) {
+                fs.exists(path, function (exists) {
+                    if (exists) {
+                        rl.close();
+                        resolve(path);
+                    }
+                    else {
+                        console.log(`Sorry, the file doesn't exist. Please check the file path and try again.`);
+                        rl.prompt();
+                    }
+                });
+
+            }
+            else {
+                console.log(`Please provide a valid path to a .txt file`);
+                rl.prompt();
+            }
+        });
+     });
+    return promise;
+};
+
+
 exports.processFile = function (path) {
-    var ordersArr = [];
-    var lineReader = require('readline').createInterface({
-        input: require('fs').createReadStream(path)
-        // input: require('fs').createReadStream(path)
+
+    var promise = new Promise(function (resolve, reject) {
+        console.log(path)
+        var ordersArr = [];
+        var lineReader = require('readline').createInterface({
+            input: require('fs').createReadStream(path)
+            // input: require('fs').createReadStream(path)
+        });
+
+        lineReader.on('line', function (line) {
+            ordersArr.push({
+                id: line.split(" ")[0],
+                location: line.split(" ")[1],
+                orderTime: line.split(" ")[2]
+            });
+        })
+            .on('close', function () {
+                resolve(ordersArr);
+            });
     });
+    return promise;
+};
 
-    lineReader.on('line', function (line) {
-        ordersArr.push({
-            id: line.split(" ")[0],
-            location: line.split(" ")[1],
-            orderTime: line.split(" ")[2]
-        });
-    })
-        .on('close', function () {
-            scheduler.getOrderListArray(ordersArr);
-        });
+exports.generateOutputFile = function (arr) {
 
-    this.genOutputFile();
-}
+    var promise = new Promise(function (resolve, reject) {
+        var file = fs.createWriteStream('output.txt');
+        file.on('error', function (err) { /* error handling */ });
+        arr1.forEach(function (v) { file.write(v.join(', ') + '\n'); });
+        file.end();
+        return;
+        // setTimeout(function () {
+        //     console.log('third method completed', someStuff);
+        //     resolve({ result: someStuff.newData });
+        // }, 3000);
+    });
+    return promise;
 
-exports.genOutputFile = function () {
-    var file = fs.createWriteStream('output.txt');
-    file.on('error', function (err) { /* error handling */ });
-    arr.forEach(function (v) { file.write(v.join(', ') + '\n'); });
-    file.end();
-    return;
-}
+};
+
