@@ -20,6 +20,11 @@ exports.droneSchedule = function (arr) {
 }
 
 recursivelyCheckList = (sortedArray, callback) => {
+
+    var currentTime = new Date();
+    currentTime.setHours(06,0,0,0);
+    var promoters=0, detractors=0,neutrals=0,scheduleList=[];
+
     if (sortedArray.length) {
         console.log(sortedArray.length);
         sortedArray.shift();
@@ -28,7 +33,7 @@ recursivelyCheckList = (sortedArray, callback) => {
     }
     else {
         console.log('done')
-        callback(null, []);
+        callback(null, scheduleList);
     }
 
 }
