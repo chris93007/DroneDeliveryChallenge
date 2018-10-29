@@ -27,7 +27,7 @@ exports.droneSchedule = function (arr) {
         arr.orderList.sort(function (a, b) {
             return a["distanceFromWarehouse"] - b["distanceFromWarehouse"] || a["orderTime"] - b["orderTime"];
         });
-        asyncMod.series([asyncMod.apply(recursivelyCheckList, arr.orderList)], function (err, results) {
+        asyncMod.waterfall([asyncMod.apply(recursivelyCheckList, arr.orderList)], function (err, results) {
             var nps = utils.calculateNPS(data, totalOrders);
             resolve({
                 finalList: results,

@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 const rl = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
@@ -79,19 +80,21 @@ exports.processFile = function (path) {
 };
 
 exports.generateOutputFile = function (result) {
-
     var promise = new Promise(function (resolve, reject) {
         console.log(`Generating output file...`);
-        //open stream
-        var file = fs.createWriteStream('output.txt');
-        //write into file
-        result['finalList'].forEach(function (v) {
-            file.write(`${v.location}\t${v.departureTime} \n`)
-        });
-        file.write(`NPS ${result.nps}`);
+        var outpath = 'outputs\\output.txt';
+        if (ensureDirectoryExistence(outpath)) {
+            //open stream
+            var file = fs.createWriteStream(outpath);
+            //write into file
+            result.finalList.forEach(function (v) {
+                file.write(`${v.location}\t${v.departureTime} \n`)
+            });
+            file.write(`NPS ${result.nps}`);
+        }
         // the finish event is emitted when all data has been flushed from the stream
         file.on('finish', () => {
-            console.log(`Output file created.`);
+            console.log(`Output file created. Location ${__dirname}\\${outpath}`);
             resolve();
         });
         file.on('error', function (err) {
@@ -104,3 +107,12 @@ exports.generateOutputFile = function (result) {
     return promise;
 
 };
+
+ensureDirectoryExistence = (filePath) => {
+    var dirname = path.dirname(filePath);
+    if (fs.existsSync(dirname)) {
+        return true;
+    }
+    ensureDirectoryExistence(dirname);
+    fs.mkdirSync(dirname);
+}
