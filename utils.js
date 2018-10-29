@@ -50,6 +50,6 @@ exports.updateCounts = (counts, orderTime, departureTime) => {
     return counts;
 }
 
-exports.calculateNPS=(counts,total)=>{
-    return (((counts.promoters/total)*100)-((counts.detractors/total)*100));
+exports.calculateNPS = (counts, total) => {
+    return (((counts.promoters / total) * 100) - ((counts.detractors / total) * 100));
 }

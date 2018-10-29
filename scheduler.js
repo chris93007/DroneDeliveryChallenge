@@ -1,4 +1,4 @@
-var async = require("async");
+var asyncMod = require("async");
 var moment = require('moment');
 
 var utils = require("./utils");
@@ -27,20 +27,21 @@ exports.droneSchedule = function (arr) {
         arr.orderList.sort(function (a, b) {
             return a["distanceFromWarehouse"] - b["distanceFromWarehouse"] || a["orderTime"] - b["orderTime"];
         });
-        async.waterfall([async.apply(recursivelyCheckList, arr.orderList)], function (err, results) {
+        asyncMod.series([asyncMod.apply(recursivelyCheckList, arr.orderList)], function (err, results) {
             var nps = utils.calculateNPS(data, totalOrders);
-            // console.log(`waterfall results`, '\n', results, '\n', nps);
-            resolve({finalList:results,nps:nps});
+            resolve({
+                finalList: results,
+                nps: nps
+            });
         })
+
     });
     return promise;
 }
 
 recursivelyCheckList = (sortedArray, callback) => {
-    // console.log('recursive function called....')
     if (sortedArray.length) {
-        async.mapValues(sortedArray, findNextOrder.bind(null, sortedArray.length), function (results, err) {
-            // console.log(`eachSeries results`, results)
+        asyncMod.mapValues(sortedArray, findNextOrder.bind(null, sortedArray.length), function (results, err) {
             if (results.markDone) {
                 //remove that element from sorted array
                 var index = sortedArray.indexOf(results.org);
@@ -60,6 +61,7 @@ recursivelyCheckList = (sortedArray, callback) => {
         callback(null, scheduleList);
     }
 }
+
 
 findNextOrder = (size, order, key, callback) => {
 
