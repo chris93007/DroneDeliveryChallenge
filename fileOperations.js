@@ -84,7 +84,7 @@ exports.generateOutputFile = function (arr) {
         file.on('error', function (err) { /* error handling */ });
         arr1.forEach(function (v) { file.write(v.join(', ') + '\n'); });
         file.end();
-        return;
+        resolve();
     });
     return promise;
 
