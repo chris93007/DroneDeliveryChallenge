@@ -29,8 +29,8 @@ exports.droneSchedule = function (arr) {
         });
         async.waterfall([async.apply(recursivelyCheckList, arr.orderList)], function (err, results) {
             var nps = utils.calculateNPS(data, totalOrders);
-            console.log(`waterfall results`, '\n', results, '\n', nps);
-            resolve();
+            // console.log(`waterfall results`, '\n', results, '\n', nps);
+            resolve({finalList:results,nps:nps});
         })
     });
     return promise;
@@ -49,6 +49,7 @@ recursivelyCheckList = (sortedArray, callback) => {
                 }
                 scheduleList.push(results.markDone);
             } else if (results.notFound) {
+                //update currentTime and start recursive again
                 currentTime = sortedArray[0].orderTime;
             }
             recursivelyCheckList(sortedArray, callback);
@@ -77,22 +78,17 @@ findNextOrder = (size, order, key, callback) => {
             org: order
         });
     } else {
-        console.log('else block');
-        console.log(key, `---`, size)
         //if element is last in the list
         if (key == (size - 1)) {
-            //update currentTime and start recursive again
+            //couldn't find an element with order time before current time
             callback({
                 notFound: true
             });
 
         }
-
         //if element is not last in the list
         else {
             callback();
         }
-
-
     }
 }

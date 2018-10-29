@@ -8,16 +8,18 @@ var utils = require("./utils");
 
 var exports = module.exports = {};
 
-var arr1 = [[1373628934214, 3],
-[137360000028934218, 3],
-[1373628934220, 1],
-[1373628934230, 1],
-[1373628934234, 0],
-[1373628934237, -1],
-[1373628934242, 0],
-[1373628934246, -1],
-[1373628934251, 0],
-[1373628934266, 11]];
+var arr1 = [
+    [1373628934214, 3],
+    [137360000028934218, 3],
+    [1373628934220, 1],
+    [1373628934230, 1],
+    [1373628934234, 0],
+    [1373628934237, -1],
+    [1373628934242, 0],
+    [1373628934246, -1],
+    [1373628934251, 0],
+    [1373628934266, 11]
+];
 
 
 exports.getFileFromCLI = function () {
@@ -29,25 +31,22 @@ exports.getFileFromCLI = function () {
             if (!path.length) {
                 console.log(`Please provide a path`);
                 rl.prompt();
-            }
-            else if (/^[a-zA-Z]:\\(\w+\\)*\w*.txt$/.test(path)) {
+            } else if (/^[a-zA-Z]:\\(\w+\\)*\w*.txt$/.test(path)) {
                 fs.exists(path, function (exists) {
                     if (exists) {
                         rl.close();
                         resolve(path);
-                    }
-                    else {
+                    } else {
                         console.log(`Sorry, the file doesn't exist. Please check the file path and try again.`);
                         rl.prompt();
                     }
                 });
-            }
-            else {
+            } else {
                 console.log(`Please provide a valid path to a .txt file`);
                 rl.prompt();
             }
         });
-     });
+    });
     return promise;
 };
 
@@ -62,31 +61,46 @@ exports.processFile = function (path) {
         });
 
         lineReader.on('line', function (line) {
-            ordersArr.push({
-                id: line.split(" ")[0],
-                location: line.split(" ")[1],
-                orderTime: utils.convertStringToDatetime(line.split(" ")[2]),
-                distanceFromWarehouse:utils.findDistance(line.split(" ")[1])
-            });
-        })
+                ordersArr.push({
+                    id: line.split(" ")[0],
+                    location: line.split(" ")[1],
+                    orderTime: utils.convertStringToDatetime(line.split(" ")[2]),
+                    distanceFromWarehouse: utils.findDistance(line.split(" ")[1])
+                });
+            })
             .on('close', function () {
-                resolve({orderList:ordersArr,totalOrders:ordersArr.length});
+                resolve({
+                    orderList: ordersArr,
+                    totalOrders: ordersArr.length
+                });
             });
     });
     return promise;
 };
 
-exports.generateOutputFile = function (arr) {
+exports.generateOutputFile = function (result) {
 
     var promise = new Promise(function (resolve, reject) {
         console.log(`Generating output file...`);
+        //open stream
         var file = fs.createWriteStream('output.txt');
-        file.on('error', function (err) { /* error handling */ });
-        arr1.forEach(function (v) { file.write(v.join(', ') + '\n'); });
+        //write into file
+        result['finalList'].forEach(function (v) {
+            file.write(`${v.location}\t${v.departureTime} \n`)
+        });
+        file.write(`NPS ${result.nps}`);
+        // the finish event is emitted when all data has been flushed from the stream
+        file.on('finish', () => {
+            console.log(`Output file created.`);
+            resolve();
+        });
+        file.on('error', function (err) {
+            console.log(err);
+        });
+        //close stream
         file.end();
-        resolve();
+
     });
     return promise;
 
 };
-
