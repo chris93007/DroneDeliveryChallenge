@@ -65,7 +65,7 @@ exports.processFile = function (path) {
             ordersArr.push({
                 id: line.split(" ")[0],
                 location: line.split(" ")[1],
-                orderTime: line.split(" ")[2],
+                orderTime: utils.convertStringToDatetime(line.split(" ")[2]),
                 distanceFromWarehouse:utils.findDistance(line.split(" ")[1])
             });
         })
