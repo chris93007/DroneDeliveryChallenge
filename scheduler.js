@@ -1,6 +1,10 @@
 var exports = module.exports = {};
 
-exports.getOrderListArray=function(arr){
-     console.log(arr);
-    return;
+exports.droneSchedule=function(arr){
+    var promise = new Promise(function (resolve, reject) {
+    //  console.log(`Building Drone Schedule...`,arr.orderList,arr.totalOrders);
+     console.log(`Building Drone Schedule...`);
+     resolve(arr);
+    });
+    return promise;
 }

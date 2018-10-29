@@ -3,6 +3,9 @@ const rl = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
 });
+var utils = require("./utils");
+
+
 var exports = module.exports = {};
 
 var arr1 = [[1373628934214, 3],
@@ -38,7 +41,6 @@ exports.getFileFromCLI = function () {
                         rl.prompt();
                     }
                 });
-
             }
             else {
                 console.log(`Please provide a valid path to a .txt file`);
@@ -53,22 +55,22 @@ exports.getFileFromCLI = function () {
 exports.processFile = function (path) {
 
     var promise = new Promise(function (resolve, reject) {
-        console.log(path)
+        console.log(`Processing file...`);
         var ordersArr = [];
         var lineReader = require('readline').createInterface({
             input: require('fs').createReadStream(path)
-            // input: require('fs').createReadStream(path)
         });
 
         lineReader.on('line', function (line) {
             ordersArr.push({
                 id: line.split(" ")[0],
                 location: line.split(" ")[1],
-                orderTime: line.split(" ")[2]
+                orderTime: line.split(" ")[2],
+                distanceFromWarehouse:utils.findDistance(line.split(" ")[1])
             });
         })
             .on('close', function () {
-                resolve(ordersArr);
+                resolve({orderList:ordersArr,totalOrders:ordersArr.length});
             });
     });
     return promise;
@@ -77,15 +79,12 @@ exports.processFile = function (path) {
 exports.generateOutputFile = function (arr) {
 
     var promise = new Promise(function (resolve, reject) {
+        console.log(`Generating output file...`);
         var file = fs.createWriteStream('output.txt');
         file.on('error', function (err) { /* error handling */ });
         arr1.forEach(function (v) { file.write(v.join(', ') + '\n'); });
         file.end();
         return;
-        // setTimeout(function () {
-        //     console.log('third method completed', someStuff);
-        //     resolve({ result: someStuff.newData });
-        // }, 3000);
     });
     return promise;
 
