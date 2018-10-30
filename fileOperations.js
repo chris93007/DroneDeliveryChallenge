@@ -55,7 +55,7 @@ exports.getFileFromCLI = function () {
 exports.processFile = function (path) {
 
     var promise = new Promise(function (resolve, reject) {
-        console.log(`Processing file...`);
+        console.log(`Processing file...`,'\n');
         var ordersArr = [];
         var lineReader = require('readline').createInterface({
             input: require('fs').createReadStream(path)
@@ -81,7 +81,7 @@ exports.processFile = function (path) {
 
 exports.generateOutputFile = function (result) {
     var promise = new Promise(function (resolve, reject) {
-        console.log(`Generating output file...`);
+        console.log(`Generating output file...`,'\n');
         var outpath = 'outputs\\output.txt';
         if (ensureDirectoryExistence(outpath)) {
             //open stream
@@ -95,7 +95,8 @@ exports.generateOutputFile = function (result) {
         }
         // the finish event is emitted when all data has been flushed from the stream
         file.on('finish', () => {
-            console.log(`Output file created. Location ${__dirname}\\${outpath}`);
+            console.log(`Output file created at:`,'\n')
+            console.log(`${__dirname}\\${outpath}`,'\n');
             resolve();
         });
         file.on('error', function (err) {
