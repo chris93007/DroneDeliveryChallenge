@@ -5,11 +5,11 @@
 * Latest departure time of the drone <= 10PM. Drone may return after 10PM
 * NPS is calcuted based on **number** of promoters and not the rating they gave
 * No duplicate orders to the same house
-* File is not empty
-* File is of correct format
-* Customers who received their orders between 1hr-1hr59min59sec from the time they placed their order would give a rating of '9'. and so on
+* Input file is not empty
+* Input file is of correct format
+* Customers who received their orders between 1hr-1hr59min59sec from the time they placed their order would give a rating of '9', and so on as follows-
 
-| Time to Delivery (hrs) | Rating       | Category  |
+| Time to Delivery (t in hours) | Rating       | Category  |
 | -------------          | -------------| -----------
 | 0>t<1                  |10            |  promoter
 | 1<=t<2                 |9             |  promoter 
