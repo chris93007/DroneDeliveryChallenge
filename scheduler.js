@@ -11,6 +11,12 @@ var currentTime = moment().set({
     'second': 0,
     'millisecond': 0
 });
+const maxTime= moment().set({
+    'hour': 22,
+    'minute': 0,
+    'second': 0,
+    'millisecond': 0
+});
 var data = {
     promoters: 0,
     detractors: 0,
@@ -40,7 +46,7 @@ exports.droneSchedule = function (arr) {
 }
 
 recursivelyCheckList = (sortedArray, callback) => {
-    if (sortedArray.length) {
+    if (sortedArray.length && currentTime<=maxTime) {
         asyncMod.mapValues(sortedArray, findNextOrder.bind(null, sortedArray.length), function (results, err) {
             if (results.markDone) {
                 //remove that element from sorted array
