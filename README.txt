@@ -1,0 +1,15 @@
+## Assumptions
+
+* All orders are placed and delivered on the same day
+* Warehouse is in the center and therefore has coordinates (0,0)
+* Latest departure time of the drone <= 10PM. Drone may return after 10PM
+* NPS is calcuted based on **number** of promoters and not the rating they gave
+* No duplicate orders to the same house
+* File is not empty
+* File is of correct format
+* Customers who received their orders between 1hr-1hr59min59sec from the time they placed their order would give a rating of '9'. and so on
+
+| Time to Delivery  | Rating 
+| ------------- | -------------
+| Content Cell  | Content Cell  
+| Content Cell  | Content Cell  
