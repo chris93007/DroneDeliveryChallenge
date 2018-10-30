@@ -32,7 +32,7 @@ exports.updateCounts = (counts, orderTime, departureTime) => {
     // calculate the duration
     var d = end.diff(start, 'seconds');
     switch (true) {
-        case d < (2 * 60 * 60):
+        case (d > 0 && d < (2 * 60 * 60)):
             //promoters
             counts.promoters++;
             break;
