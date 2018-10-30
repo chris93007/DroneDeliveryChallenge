@@ -57,7 +57,11 @@ recursivelyCheckList = (sortedArray, callback) => {
                 scheduleList.push(results.markDone);
             } else if (results.notFound) {
                 //update currentTime and start recursive again
-                currentTime = sortedArray[0].orderTime;
+                var temp=sortedArray.sort(function (a, b) {
+                    return a["orderTime"] - b["orderTime"];
+                });
+                currentTime = temp[0].orderTime;
+                delete temp;
             }
             recursivelyCheckList(sortedArray, callback);
 
@@ -72,6 +76,7 @@ recursivelyCheckList = (sortedArray, callback) => {
 findNextOrder = (size, order, key, callback) => {
 
     if (order.orderTime <= currentTime) {
+        if(order.distanceFromWarehouse>0){
         var deliverTo = {
             location: order.id,
             departureTime: currentTime.format("HH:mm:ss")
@@ -81,8 +86,9 @@ findNextOrder = (size, order, key, callback) => {
         //update current time based on current time and distance
         currentTime = utils.findNewCurrentTime(currentTime, order.distanceFromWarehouse);
         //exit this loop with result object and index of completed order
+    }
         callback({
-            markDone: deliverTo,
+            markDone: deliverTo||[],
             org: order
         });
     } else {

@@ -88,6 +88,7 @@ exports.generateOutputFile = function (result) {
             var file = fs.createWriteStream(outpath);
             //write into file
             result.finalList.forEach(function (v) {
+                if(Object.keys(v).length)
                 file.write(`${v.location}\t${v.departureTime} \n`)
             });
             file.write(`NPS ${result.nps}`);
