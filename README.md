@@ -9,7 +9,7 @@
 * File is of correct format
 * Customers who received their orders between 1hr-1hr59min59sec from the time they placed their order would give a rating of '9'. and so on
 
-| Time to Delivery  | Rating 
+| Time to Delivery  | Rating |
 | ------------- | -------------
 | Content Cell  | Content Cell  
 | Content Cell  | Content Cell  
