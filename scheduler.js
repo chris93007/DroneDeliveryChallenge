@@ -29,13 +29,14 @@ var scheduleList = [];
 exports.droneSchedule = function (arr) {
     var promise = new Promise(function (resolve, reject) {
         console.log(`Building Drone Schedule...`,'\n');
-        totalOrders = arr.orderList.length;
+        
         arr.orderList.sort(function (a, b) {
             return a["distanceFromWarehouse"] - b["distanceFromWarehouse"] || a["orderTime"] - b["orderTime"];
         });
+        totalOrders = arr.orderList.length;
         asyncMod.waterfall([asyncMod.apply(recursivelyCheckList, arr.orderList)], function (err, results) {
             var nps = utils.calculateNPS(data, totalOrders);
-            console.log('\n',`NPS :`,'\n', nps,'\n')
+            console.log('\n',`NPS : ${nps}`,'\n',data,'\n', `total : ${totalOrders}`,'\n')
             resolve({
                 finalList: results,
                 nps: nps
@@ -79,7 +80,6 @@ recursivelyCheckList = (sortedArray, callback) => {
 
 
 findNextOrder = (size, order, key, callback) => {
-
     if (order.orderTime <= currentTime) {
         //check if location is valid
         if (order.distanceFromWarehouse > 0) {
