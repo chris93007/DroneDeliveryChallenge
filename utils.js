@@ -51,5 +51,6 @@ exports.updateCounts = (counts, orderTime, orderArrivalTime) => {
 }
 
 exports.calculateNPS = (counts, total) => {
-    return (((counts.promoters / total) * 100) - ((counts.detractors / total) * 100));
+    var nps=((counts.promoters / total) * 100) - ((counts.detractors / total) * 100);
+    return Math.round(nps * 100) / 100;
 }

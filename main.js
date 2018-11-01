@@ -11,12 +11,18 @@ var scheduler = require("./scheduler");
 */
 
 function main() {
-    fileOps.getFileFromCLI()
-        .then(fileOps.processFile)
-        .then(scheduler.droneSchedule)
-        .then(fileOps.generateOutputFile)
-        .then(() => {
-            process.exit();
-        });
+    // fileOps.getFileFromCLI()
+    // .then(fileOps.processFile)
+    // .then(scheduler.droneSchedule)
+    // .then(fileOps.generateOutputFile)
+    // .then(()=>{
+    //     process.exit();
+    // });
+    fileOps.processFile(".\\inputs\\input7.txt")
+    .then(scheduler.droneSchedule)
+    .then(fileOps.generateOutputFile)
+    .then(()=>{
+        process.exit();
+    });
 }
 main();
