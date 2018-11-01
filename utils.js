@@ -23,24 +23,24 @@ exports.convertStringToDatetime = (string) => {
 
 exports.findNewCurrentTime = (currTime, distance) => {
 
-    return currTime.add(distance * 2, 'minutes');
+    return currTime.add(distance, 'minutes');
 }
 
-exports.updateCounts = (counts, orderTime, departureTime) => {
+exports.updateCounts = (counts, orderTime, orderArrivalTime) => {
     var start = moment.utc(orderTime, "HH:mm");
-    var end = moment.utc(departureTime, "HH:mm");
+    var end = moment.utc(orderArrivalTime, "HH:mm");
     // calculate the duration
     var d = end.diff(start, 'seconds');
     switch (true) {
-        case d < (2 * 60 * 60):
+        case (d > 0 && d < (2 * 60 * 60)): //7200
             //promoters
             counts.promoters++;
             break;
-        case ((2 * 60 * 60) <= d && d < (4 * 60 * 60)):
+        case ((2 * 60 * 60) <= d && d < (4 * 60 * 60)): //7200-14400
             //neutrals
             counts.neutrals++;
             break;
-        case d >= (4 * 60 * 60):
+        case d >= (4 * 60 * 60): //14400
             //detractors
             counts.detractors++;
             break;
@@ -51,5 +51,6 @@ exports.updateCounts = (counts, orderTime, departureTime) => {
 }
 
 exports.calculateNPS = (counts, total) => {
-    return (((counts.promoters / total) * 100) - ((counts.detractors / total) * 100));
+    var nps=((counts.promoters / total) * 100) - ((counts.detractors / total) * 100);
+    return Math.round(nps * 100) / 100;
 }
