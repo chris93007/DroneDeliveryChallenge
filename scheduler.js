@@ -72,6 +72,11 @@ recursivelyCheckList = (sortedArray, callback) => {
 
         });
     } 
+    else if(sortedArray.length && currentTime>maxTime){
+        //orders left over after 10PM
+        data.detractors+=sortedArray.length;
+        callback(null, scheduleList);
+    }
     //all orders done OR time is up
     else {
         callback(null, scheduleList);

@@ -3,7 +3,8 @@
 * All orders are placed and delivered on the same day
 * Warehouse is in the center and therefore has coordinates (0,0)
 * Latest departure time of the drone <= 10PM. Drone may return after 10PM
-* NPS is calcuted based on **number** of promoters and not the rating they gave
+* After 10PM no orders will be delivered, pending orders are automatically considered as detractors
+* NPS is calcuted based on **number** of promoters/detractors and not the rating they gave
 * No duplicate orders to the same house
 * Input file is not empty
 * Input file is of correct format
