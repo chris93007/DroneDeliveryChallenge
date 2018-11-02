@@ -103,6 +103,9 @@ findNextOrder = (size, order, key, callback) => {
             currentTime = utils.findNewCurrentTime(currentTime, order.distanceFromWarehouse);
 
         }
+        else{
+            data.neutrals++;
+        }
         //exit this loop with result object OR [] and index of completed order
         callback({
             markDone: deliverTo || [],

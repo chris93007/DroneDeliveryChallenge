@@ -4,6 +4,7 @@
 * Warehouse is in the center and therefore has coordinates (0,0)
 * Latest departure time of the drone <= 10PM. Drone may return after 10PM
 * After 10PM no orders will be delivered, pending orders are automatically considered as detractors
+* If a location has 0 distance it is automatically considered as a neutral
 * NPS is calcuted based on **number** of promoters/detractors and not the rating they gave
 * No duplicate orders to the same house
 * Input file is not empty
